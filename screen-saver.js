@@ -136,6 +136,8 @@ class LovelaceScreenSaver extends HTMLElement {
         ha_card.innerHTML = `
             <button id="btnStart">启动屏保</button>
             <button id="btnUpdate">更新数据</button>
+            <button id="btnFullScreen">全屏</button>
+            <button id="btnExitFullScreen">退出全屏</button>
         `
         shadow.appendChild(ha_card)
         // 创建样式
@@ -162,6 +164,12 @@ class LovelaceScreenSaver extends HTMLElement {
             window.HA_SCREEN_SAVER.add(this._config.list)
             this.toast("更新成功")
         }
+        $('#btnFullScreen').onclick = () => {
+            document.documentElement.requestFullscreen()
+        }
+        $('#btnExitFullScreen').onclick = () => {
+            document.documentElement.exitFullscreen()
+        }
     }
 
     // 更新界面数据
@@ -171,3 +179,11 @@ class LovelaceScreenSaver extends HTMLElement {
 }
 
 if (!customElements.get('lovelace-screen-saver')) customElements.define('lovelace-screen-saver', LovelaceScreenSaver);
+// 添加预览
+window.customCards = window.customCards || [];
+window.customCards.push({
+    type: "lovelace-screen-saver",
+    name: "屏保",
+    preview: true,
+    description: "屏幕保护程序"
+});
