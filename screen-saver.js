@@ -3,11 +3,7 @@ class HaScreenSaver {
         this.timer = null
         this.time = 3
         this.index = 0
-        this.list = [{
-            url: 'https://img-prod-cms-rt-microsoft-com.akamaized.net/cms/api/am/imageFileData/RE4wEae?ver=34a1'
-        }, {
-            url: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fattach.bbs.miui.com%2Fforum%2F201304%2F25%2F195133e7a1l7b4f5117y4y.jpg&refer=http%3A%2F%2Fattach.bbs.miui.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1621329974&t=e5ecea18a460a5a2f433047a61596ec6'
-        }]
+        this.list = []
         // 监听事件
         this.created()
     }
@@ -89,10 +85,10 @@ class LovelaceScreenSaver extends HTMLElement {
         return {
             list: [
                 {
-                    url: 'https://img-prod-cms-rt-microsoft-com.akamaized.net/cms/api/am/imageFileData/RE4wEae?ver=34a1'
+                    url: 'https://cdn.jsdelivr.net/gh/shaonianzhentan/lovelace-screen-saver@main/test1.jpeg'
                 },
                 {
-                    url: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fattach.bbs.miui.com%2Fforum%2F201304%2F25%2F195133e7a1l7b4f5117y4y.jpg&refer=http%3A%2F%2Fattach.bbs.miui.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1621329974&t=e5ecea18a460a5a2f433047a61596ec6'
+                    url: 'https://cdn.jsdelivr.net/gh/shaonianzhentan/lovelace-screen-saver@main/test2.jpeg'
                 }
             ]
         }
