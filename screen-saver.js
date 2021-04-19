@@ -143,7 +143,7 @@ class LovelaceScreenSaver extends HTMLElement {
         // 创建样式
         const style = document.createElement('style')
         style.textContent = `
-            .custom-card-panel{}
+            .custom-card-panel{ padding:10px; }
         `
         shadow.appendChild(style);
         // 保存核心DOM对象
@@ -168,7 +168,7 @@ class LovelaceScreenSaver extends HTMLElement {
             document.documentElement.requestFullscreen()
         }
         $('#btnExitFullScreen').onclick = () => {
-            document.documentElement.exitFullscreen()
+            document.exitFullscreen()
         }
     }
 
