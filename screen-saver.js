@@ -6,6 +6,27 @@ class HaScreenSaver {
         this.list = []
         // 监听事件
         this.created()
+        this.autoTimer = null
+    }
+
+    autoStart(timeout) {
+        this.timeout = timeout
+        // 鼠标停止移动时，自动进入屏保
+        if (!this.autoTimer) {
+            const timeoutEvent = () => {
+                if (this.autoTimer) {
+                    clearTimeout(this.autoTimer)
+                }
+                this.autoTimer = setTimeout(() => {
+                    if (!this.timer) {
+                        console.log("启动服务", new Date().toLocaleString())
+                        this.start()
+                    }
+                }, 1000 * this.timeout)
+            }
+            document.addEventListener('mousemove', timeoutEvent)
+            timeoutEvent()
+        }
     }
 
     // 创建DOM节点
@@ -30,7 +51,7 @@ class HaScreenSaver {
         }
         document.body.appendChild(div)
         this.node = div
-        // 日期后面加
+        // 日期后面加        
     }
 
     // 添加信息
@@ -56,6 +77,7 @@ class HaScreenSaver {
     quit() {
         clearInterval(this.timer)
         this.node.style.display = 'none'
+        this.timer = null
     }
 
     // 下一张
@@ -83,6 +105,7 @@ class LovelaceScreenSaver extends HTMLElement {
     // 自定义默认配置
     static getStubConfig() {
         return {
+            timeout: 5,
             list: [
                 {
                     url: 'https://cdn.jsdelivr.net/gh/shaonianzhentan/lovelace-screen-saver@main/test1.jpeg'
@@ -131,15 +154,33 @@ class LovelaceScreenSaver extends HTMLElement {
         ha_card.className = 'custom-card-panel'
         ha_card.innerHTML = `
             <button id="btnStart">启动屏保</button>
-            <button id="btnUpdate">更新数据</button>
             <button id="btnFullScreen">全屏</button>
             <button id="btnExitFullScreen">退出全屏</button>
+            <div class="today"></div>
         `
         shadow.appendChild(ha_card)
         // 创建样式
         const style = document.createElement('style')
         style.textContent = `
             .custom-card-panel{ padding:10px; }
+            .today {
+                position: fixed;
+                left: 10%;
+                bottom: 5%;
+                z-index: 10000;
+                color: white;
+            }
+    
+            .today h1 {
+                font-size: 60px;
+                margin: 0;
+            }
+            .today b{display:inline-block;width:20px;text-align:center;}
+
+            .today h3 {
+                font-size: 30px;
+                margin: 0;
+            }
         `
         shadow.appendChild(style);
         // 保存核心DOM对象
@@ -149,16 +190,12 @@ class LovelaceScreenSaver extends HTMLElement {
         this.isCreated = true
 
         /* ***************** 附加代码 ***************** */
-        let { _config, $ } = this
+        let { $ } = this
         // 定义事件
         $('#btnStart').onclick = () => {
             window.HA_SCREEN_SAVER.add(this._config.list)
             window.HA_SCREEN_SAVER.start()
-        }
-
-        $('#btnUpdate').onclick = () => {
-            window.HA_SCREEN_SAVER.add(this._config.list)
-            this.toast("更新成功")
+            window.HA_SCREEN_SAVER.autoStart(this._config.timeout)
         }
         $('#btnFullScreen').onclick = () => {
             document.documentElement.requestFullscreen()
@@ -166,6 +203,14 @@ class LovelaceScreenSaver extends HTMLElement {
         $('#btnExitFullScreen').onclick = () => {
             document.exitFullscreen()
         }
+        const week = ['日', '一', '二', '三', '四', '五', '六']
+        let isTick = false
+        setInterval(() => {
+            let today = new Date()
+            $('.today').innerHTML = `<h1>${today.getHours()}<b>${isTick ? ':' : ''}</b>${today.getMinutes()}</h1>
+            <h3>${today.getMonth() + 1}月${today.getDate()}日，星期${week[today.getDay()]}</h3>`
+            isTick = !isTick
+        }, 1000);
     }
 
     // 更新界面数据

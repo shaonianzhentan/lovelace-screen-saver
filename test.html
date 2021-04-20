@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta charset="utf-8" />
+</head>
+
+<body>
+    <lovelace-screen-saver id="lss"></lovelace-screen-saver>
+    <script src="screen-saver.js"></script>
+    <script>
+        const lss = document.querySelector('#lss')
+        lss.hass = {}
+        lss.setConfig({
+            timeout: 3,
+            list: [
+                {
+                    url: 'https://cdn.jsdelivr.net/gh/shaonianzhentan/lovelace-screen-saver@main/test1.jpeg'
+                },
+                {
+                    url: 'https://cdn.jsdelivr.net/gh/shaonianzhentan/lovelace-screen-saver@main/test2.jpeg'
+                }
+            ]
+        })
+    </script>
+</body>
+
+</html>
