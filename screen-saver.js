@@ -153,9 +153,18 @@ class LovelaceScreenSaver extends HTMLElement {
         const ha_card = document.createElement('ha-card');
         ha_card.className = 'custom-card-panel'
         ha_card.innerHTML = `
-            <button id="btnStart">启动屏保</button>
-            <button id="btnFullScreen">全屏</button>
-            <button id="btnExitFullScreen">退出全屏</button>
+            <button id="btnStart">
+                <ha-icon icon="mdi:monitor-screenshot"></ha-icon>
+                启动屏保
+            </button>
+            <button id="btnFullScreen">
+                <ha-icon icon="mdi:fullscreen"></ha-icon>              
+                全屏
+            </button>
+            <button id="btnExitFullScreen">
+                <ha-icon icon="mdi:fullscreen-exit"></ha-icon>
+                退出全屏
+            </button>
             <div class="today"></div>
         `
         shadow.appendChild(ha_card)
