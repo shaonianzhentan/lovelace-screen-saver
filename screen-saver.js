@@ -1,7 +1,6 @@
 class HaScreenSaver {
     constructor() {
         this.timer = null
-        this.time = 3
         this.index = 0
         this.list = []
         // 监听事件
@@ -26,32 +25,70 @@ class HaScreenSaver {
             }
             document.addEventListener('mousemove', timeoutEvent)
             timeoutEvent()
+            // 启动定时器
+            const week = ['日', '一', '二', '三', '四', '五', '六']
+            let isTick = false
+            setInterval(() => {
+                let today = new Date()
+                this.node.querySelector('.lovelace-screen-saver-today h1').innerHTML = `${today.getHours()}<b>${isTick ? ':' : ''}</b>${today.getMinutes()}`
+                this.node.querySelector('.lovelace-screen-saver-today h3').innerHTML = `${today.getMonth() + 1}月${today.getDate()}日，星期${week[today.getDay()]}`
+                isTick = !isTick
+            }, 1000);
         }
     }
 
     // 创建DOM节点
     created() {
         const div = document.createElement('div')
-        const style = {
-            width: '100%',
-            height: '100vh',
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-            transition: 'background 1s',
-            position: 'fixed',
-            display: 'none',
-            left: 0,
-            top: 0
-        }
-        Object.keys(style).forEach(key => {
-            div.style[key] = style[key]
-        })
+        div.classList.add('lovelace-screen-saver')
+        // 日期
+        div.innerHTML = `<div class="lovelace-screen-saver-today">
+                <h1></h1>
+                <h3></h3>
+            </div>`
         div.onclick = () => {
             this.quit()
         }
         document.body.appendChild(div)
         this.node = div
-        // 日期后面加        
+        // 全局样式
+        const style = document.createElement('style')
+        style.innerHTML = `
+            .lovelace-screen-saver {
+                width: 100%; height: 100vh;
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-color:black;
+                transition: background 1s;
+                position: fixed;
+                display: none;
+                left: 0;
+                top: 0;
+            }
+            
+            .lovelace-screen-saver-today {
+                position: fixed;
+                left: 10%;
+                bottom: 5%;
+                z-index: 10000;
+                color: white;
+            }    
+
+            .lovelace-screen-saver-today h1 {
+                font-size: 60px;
+                margin: 0;
+            }
+
+            .lovelace-screen-saver-today b{display:inline-block;width:20px;text-align:center;}
+
+            .lovelace-screen-saver-today h3 {
+                font-size: 30px;
+                margin: 0;
+            }
+        `
+        document.head.appendChild(style)
+
+
     }
 
     // 添加信息
@@ -61,16 +98,21 @@ class HaScreenSaver {
     }
 
     // 开始
-    start() {
+    start(time) {
         if (this.timer) {
             this.quit()
+        }
+        if (time) {
+            this.time = time
+        } else {
+            time = this.time
         }
         this.index = 0
         this.next()
         this.node.style.display = 'block'
         this.timer = setInterval(() => {
             this.next()
-        }, this.time * 1000)
+        }, time * 1000)
     }
 
     // 退出
@@ -105,7 +147,8 @@ class LovelaceScreenSaver extends HTMLElement {
     // 自定义默认配置
     static getStubConfig() {
         return {
-            timeout: 5,
+            time: 5,
+            timeout: 30,
             list: [
                 {
                     url: 'https://cdn.jsdelivr.net/gh/shaonianzhentan/lovelace-screen-saver@main/test1.jpeg'
@@ -171,25 +214,7 @@ class LovelaceScreenSaver extends HTMLElement {
         // 创建样式
         const style = document.createElement('style')
         style.textContent = `
-            .custom-card-panel{ padding:10px; }
-            .today {
-                position: fixed;
-                left: 10%;
-                bottom: 5%;
-                z-index: 10000;
-                color: white;
-            }
-    
-            .today h1 {
-                font-size: 60px;
-                margin: 0;
-            }
-            .today b{display:inline-block;width:20px;text-align:center;}
-
-            .today h3 {
-                font-size: 30px;
-                margin: 0;
-            }
+            .custom-card-panel{ padding:10px; }            
         `
         shadow.appendChild(style);
         // 保存核心DOM对象
@@ -202,9 +227,18 @@ class LovelaceScreenSaver extends HTMLElement {
         let { $ } = this
         // 定义事件
         $('#btnStart').onclick = () => {
-            window.HA_SCREEN_SAVER.add(this._config.list)
-            window.HA_SCREEN_SAVER.start()
-            window.HA_SCREEN_SAVER.autoStart(this._config.timeout)
+            let { list, timeout, time } = this._config
+            window.HA_SCREEN_SAVER.add(list)
+            // 默认5秒
+            if (/^\d+$/.test(time) === false || time < 5) {
+                time = 5
+            }
+            window.HA_SCREEN_SAVER.start(time)
+            // 默认30秒
+            if (/^\d+$/.test(timeout) === false || timeout < 30) {
+                timeout = 30
+            }
+            window.HA_SCREEN_SAVER.autoStart(timeout)
         }
         $('#btnFullScreen').onclick = () => {
             document.documentElement.requestFullscreen()
@@ -212,14 +246,6 @@ class LovelaceScreenSaver extends HTMLElement {
         $('#btnExitFullScreen').onclick = () => {
             document.exitFullscreen()
         }
-        const week = ['日', '一', '二', '三', '四', '五', '六']
-        let isTick = false
-        setInterval(() => {
-            let today = new Date()
-            $('.today').innerHTML = `<h1>${today.getHours()}<b>${isTick ? ':' : ''}</b>${today.getMinutes()}</h1>
-            <h3>${today.getMonth() + 1}月${today.getDate()}日，星期${week[today.getDay()]}</h3>`
-            isTick = !isTick
-        }, 1000);
     }
 
     // 更新界面数据
