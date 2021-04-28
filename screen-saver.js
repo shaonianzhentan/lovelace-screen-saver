@@ -68,21 +68,21 @@ class HaScreenSaver {
             
             .lovelace-screen-saver-today {
                 position: fixed;
-                left: 10%;
+                left: 5%;
                 bottom: 5%;
                 z-index: 10000;
                 color: white;
             }    
 
             .lovelace-screen-saver-today h1 {
-                font-size: 60px;
+                font-size: 80px;
                 margin: 0;
             }
 
             .lovelace-screen-saver-today b{display:inline-block;width:20px;text-align:center;}
 
             .lovelace-screen-saver-today h3 {
-                font-size: 30px;
+                font-size: 50px;
                 margin: 0;
             }
         `
@@ -198,23 +198,28 @@ class LovelaceScreenSaver extends HTMLElement {
         ha_card.innerHTML = `
             <button id="btnStart">
                 <ha-icon icon="mdi:monitor-screenshot"></ha-icon>
+                <br/>
                 启动屏保
             </button>
             <button id="btnFullScreen">
-                <ha-icon icon="mdi:fullscreen"></ha-icon>              
+                <ha-icon icon="mdi:fullscreen"></ha-icon>
+                <br/>
                 全屏
             </button>
             <button id="btnExitFullScreen">
                 <ha-icon icon="mdi:fullscreen-exit"></ha-icon>
+                <br/>
                 退出全屏
             </button>
-            <div class="today"></div>
         `
         shadow.appendChild(ha_card)
         // 创建样式
         const style = document.createElement('style')
         style.textContent = `
-            .custom-card-panel{ padding:10px; }            
+            .custom-card-panel{ padding:10px; display:flex;}
+            .custom-card-panel button{width:100%;text-align:center;padding:10px 0; 
+                color: var(--primary-text-color);
+                background: transparent; outline: none; border: none;}
         `
         shadow.appendChild(style);
         // 保存核心DOM对象
