@@ -65,7 +65,9 @@ class HaScreenSaver {
                 left: 0;
                 top: 0;
             }
-            
+            .lovelace-screen-saver-overflow{
+                overflow: hidden
+            }
             .lovelace-screen-saver-today {
                 position: fixed;
                 left: 5%;
@@ -110,6 +112,9 @@ class HaScreenSaver {
         this.index = 0
         this.next()
         this.node.style.display = 'block'
+        if (!document.body.classList.contains('lovelace-screen-saver-overflow')) {
+            document.body.classList.add('lovelace-screen-saver-overflow')
+        }
         this.timer = setInterval(() => {
             this.next()
         }, time * 1000)
@@ -119,6 +124,7 @@ class HaScreenSaver {
     quit() {
         clearInterval(this.timer)
         this.node.style.display = 'none'
+        document.body.classList.remove('lovelace-screen-saver-overflow')
         this.timer = null
     }
 
