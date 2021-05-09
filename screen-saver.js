@@ -210,12 +210,17 @@ class LovelaceScreenSaver extends HTMLElement {
             <button id="btnFullScreen">
                 <ha-icon icon="mdi:fullscreen"></ha-icon>
                 <br/>
-                全屏
+                窗口全屏
             </button>
             <button id="btnExitFullScreen">
                 <ha-icon icon="mdi:fullscreen-exit"></ha-icon>
                 <br/>
                 退出全屏
+            </button>
+            <button id="btnReload">
+                <ha-icon icon="mdi:reload"></ha-icon>
+                <br/>
+                刷新页面
             </button>
         `
         shadow.appendChild(ha_card)
@@ -256,6 +261,9 @@ class LovelaceScreenSaver extends HTMLElement {
         }
         $('#btnExitFullScreen').onclick = () => {
             document.exitFullscreen()
+        }
+        $('#btnReload').onclick = () => {
+            location.reload()
         }
     }
 
