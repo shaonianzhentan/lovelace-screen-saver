@@ -246,6 +246,7 @@ class LovelaceScreenSaver extends HTMLElement {
             .custom-card-panel button{width:100%;text-align:center;padding:10px 0; 
                 color: var(--primary-text-color);
                 background: transparent; outline: none; border: none;}
+            .custom-card-panel button:hover{ color: var(--primary-color); }
         `
         shadow.appendChild(style);
         // 保存核心DOM对象
