@@ -57,8 +57,7 @@ class HaScreenSaver {
             .lovelace-screen-saver {
                 width: 100%; height: 100vh;
                 background-size: cover;
-                background-repeat: no-repeat center center;
-                background-color:black;
+                background:black no-repeat center center;
                 transition: background 1s;
                 position: fixed;
                 display: none;
