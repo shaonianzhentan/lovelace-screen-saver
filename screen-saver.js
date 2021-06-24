@@ -57,7 +57,7 @@ class HaScreenSaver {
             .lovelace-screen-saver {
                 width: 100%; height: 100vh;
                 background-size: cover;
-                background-repeat: no-repeat;
+                background-repeat: no-repeat center center;
                 background-color:black;
                 transition: background 1s;
                 position: fixed;
@@ -89,18 +89,34 @@ class HaScreenSaver {
             }
         `
         document.head.appendChild(style)
-
-
     }
 
     // 添加信息
     add(list) {
-        this.list = list
+        this.list = list.map(ele => {
+            const img = new Image()
+            img.src = ele.url
+            return ele
+        })
         this.index = 0
     }
 
+    fire(type, data) {
+        const event = new Event(type, {
+            bubbles: true,
+            cancelable: false,
+            composed: true
+        });
+        event.detail = data;
+        document.querySelector('home-assistant').dispatchEvent(event);
+    }
+
+
     // 开始
     start(time) {
+        // 关闭更多信息弹窗
+        this.fire('hass-more-info', { entityId: null })
+
         if (this.timer) {
             this.quit()
         }
@@ -269,7 +285,6 @@ class LovelaceScreenSaver extends HTMLElement {
 
     // 更新界面数据
     updated(hass) {
-        let { $, _config } = this
     }
 }
 
